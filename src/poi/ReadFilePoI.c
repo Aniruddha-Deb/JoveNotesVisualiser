@@ -1,30 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "parse_header.h"
+#include "y.tab.h"
+
+void process_qa( char* question, char* answer ) {
+    printf( "Processing qa %s -> %s\n", question, answer );    
+}
+
+void process_fib( char* question, char* blanks ) {
+    printf( "Processing fib %s -> %s\n", question, blanks );    
+}
+
+void process_definition( char* question, char* definition ) {
+    printf( "Processing definition %s -> %s\n", question, definition );    
+}
 
 int main( void ) {
-    FILE* fp = fopen( "/Users/Sensei/JoveNotes/JoveNotes-X/Class-10/Physics/12 - Thermionic Emission/12.1 - Thermionic Emission (qa).jn", "r" );
+    printf("Running\n");
+    extern FILE* yyin;
     FILE* fout = fopen( "/Users/Sensei/temp/cout.txt", "w" );
-
-    if( fp == NULL ) {
+    yyin = fopen( "/Users/Sensei/JoveNotes/JoveNotes-X/Class-10/Physics/12 - Thermionic Emission/12.1 - Thermionic Emission (qa).jn", "r" );
+    if( yyin == NULL ) {
         printf("Could not open file\n");
         return -1;
     }
-
-    char* buffer = malloc( 1024 );
-    int numQA = 0;
-    while( fscanf( fp, "%s ", buffer ) != EOF ) {        
-        if( strncmp( buffer, "@qa", 3 ) == 0 ) {
-            numQA++;
-            fscanf( fp, "\"%[^\"]\"", buffer );
-            fprintf( fout, "Question: %s\n", buffer );
-            fscanf( fp, "\n\"%[^\"]\"", buffer );
-            fprintf( fout, "Answer: %s\n", buffer );
-        }
-    }
-    printf( "%d\n", numQA );
-    free( buffer );
-    fclose( fp );
+    yyparse();
+    fclose( yyin );
+    fclose( fout );
 
     return 0;
 }

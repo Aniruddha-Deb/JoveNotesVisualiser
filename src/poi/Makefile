@@ -1,5 +1,6 @@
 CC=gcc
 LEX=lex
+YACC=yacc
 BIN_PATH="../../bin"
 
 GTKDemo: GTKDemo.c 
@@ -11,6 +12,7 @@ ReadFilePoI: ReadFilePoI.c
 	"$(BIN_PATH)/ReadFilePoI"
 
 LexPoI: LexPoI.l
+	$(YACC) -d YaccPoI.y
 	$(LEX) LexPoI.l
-	$(CC) -o "$(BIN_PATH)/LexPoI" -ll lex.yy.c
-	"$(BIN_PATH)/LexPoI"
+	$(CC) -o "$(BIN_PATH)/ReadFilePoI" -ll lex.yy.c y.tab.c ReadFilePoI.c -I y.tab.h 
+	"$(BIN_PATH)/ReadFilePoI"
